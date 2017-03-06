@@ -1,0 +1,13 @@
+{% if lines %}
+    <ul>
+    {% for line in lines %}
+    <li>
+    	{% for word in line %}    
+    		<span title="{{ word.id }} {{ word.part }} {{ word.page }} {{ word.line }}">{{ word.orig }}</span>
+    	{% endfor %}
+     </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}

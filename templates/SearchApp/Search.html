@@ -1,0 +1,67 @@
+{% extends "SearchApp/RootTemplate.html" %}
+{% load scatFilters %}
+
+{% block main %}
+<form action="." method="GET" class="searchForm">
+<input type="hidden" name="p" value="1"/>
+
+{% include "SearchApp/ShowForm.html" with form=wordForm %}
+{% include "SearchApp/ShowForm.html" with form=gramForm %}
+
+<p>
+	<select onclick="addFilterField(this)">
+	<option>Дополнительные параметры поиска</option>
+	{% include "SearchApp/ShowAdditionalFilters.html" with form=wordForm %}
+	{% include "SearchApp/ShowAdditionalFilters.html" with form=gramForm %}
+	</select>
+</p>
+
+
+
+<input type="submit" value="Поиск"/>
+</form>
+<div>
+
+</div>
+
+<div class="manuscriptText" style="white-space: normal;">
+{% if wordForm.group.value %}
+{% regroup results by orig as orig_list %}
+
+<ul>
+{% for orig in orig_list %}
+<li>{{ orig.grouper }}
+<ol>
+	{% for result in orig.list %}
+	<li>
+	{% for word in result.line %}    
+			<a class="{% if word.id == result.id %}curword{% endif %} hastooltip" href="{% url scat-show-word-page word.id %}"><span class="tooltip">{{ word.id }}<br/>Часть: {{ word.part }}<br/>Страница: {{ word.page }}{% if not word.front %}об.{% endif %}<br/>Строка: {{ word.line }}</span>{{ word.orig|ScatWordFormat:"nobr" }}</a>	
+	{% endfor %}
+	</li>
+	{% endfor %}
+</ol>
+</li>
+{% endfor %}
+</ul>
+
+{% else %}
+<ol start="{{ pagination.2 }}">
+{% for result in results %}
+	<li>
+	{% for word in result.line %}    
+			<a class="{% if word.id == result.id %}curword{% endif %} hastooltip" href="{% url scat-show-word-page word.id %}"><span class="tooltip">{{ word.id }}<br/>Часть: {{ word.part }}<br/>Страница: {{ word.page }}{% if not word.front %}об.{% endif %}<br/>Строка: {{ word.line }}</span>{{ word.orig|ScatWordFormat:"nobr" }}</a>	
+	{% endfor %}
+	</li>
+{% endfor %}
+</ol>
+{% endif %}
+
+{% comment %} {% for word in results %}    
+				<a class="hastooltip" href="{% url "scat-show-word-page" word.id %}"><span class="tooltip">{{ word.id }}<br/>Часть: {{ word.part }}<br/>Страница: {{ word.page }}{% if not word.front %}об.{% endif %}<br/>Строка: {{ word.line }}</span>{{ word.orig|safe }}</a>
+			{% endfor %} {% endcomment %}
+</div>
+<div>
+	{% if pagination.0 %}<a href="{{ pagination.0 }}">&lt; предыдущая</a>{% endif %}  
+	{% if pagination.1 %}<a href="{{ pagination.1 }}">следующая &gt;</a>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "SearchApp/RootTemplate.html" %}
+{% load scatFilters %}
+
+{% block main %}
+<div id="showGramData">
+<table>
+<caption>Грамматические данные</caption>
+	<tbody>
+	{% for column in columns %}
+		{% for line in column %}
+			{% for word in line %}
+			{% if not word.isPunctuation %}
+				<tr id="gd.{{ word.id }}" onmouseover="hghltWord(this)" onmouseout="dehghltWord(this)" for="{{ word.id }}">
+					<td>{{ word.orig|ScatWordFormat:"nobr" }}<br/><span style="font-family: serif;">{% if word.name %} (имя собств.){% endif %}
+					
+					</span></td>
+					{% if not word.gramInfo %}<td>(данных нет)</td>{% endif %}
+{% with gi=word.gramInfo %}
+{% if gi.POS %}<td title="Часть речи">{{ gi.get_POS_display }}{% if gi.reflexive %} возвр.{% endif %}</td>{% endif %}
+{% if gi.declensionType %}<td>{{ gi.get_declensionType_display }}</td>{% endif %}
+{% if gi.flexionDeclensionType %}<td>{{ gi.get_flexionDeclensionType_display }}</td>{% endif %}
+{% if gi.gender %}<td>{{ gi.get_gender_display }}</td>{% endif %}
+{% if gi.case %}<td>{{ gi.get_case_display }}</td>{% endif %}
+{% if gi.number %}<td>{{ gi.get_number_display }}</td>{% endif %}
+{% if gi.mood %}<td>{{ gi.get_mood_display }}</td>{% endif %}
+{% if gi.verbTense %}<td>{{ gi.get_verbTense_display }}</td>{% endif %}
+{% if gi.participleTense %}<td>{{ gi.get_participleTense_display }}</td>{% endif %}
+{% if gi.verbClass %}<td>{{ gi.get_verbClass_display }}</td>{% endif %}
+{% if gi.verbRole %}<td>{{ gi.get_verbRole_display }}</td>{% endif %}
+{% if gi.person %}<td>{{ gi.person }}</td>{% endif %}
+{% comment %} {% if gi.reflexive != None %}<td>{{ gi.reflexive }}</td>{% endif %} {% endcomment %}
+{% endwith %}
+
+
+				</tr>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+	{% endfor %}
+	</tbody>
+</table>
+</div>
+
+<div class="showManuscript manuscriptText">
+<h4 style="font-family: serif;">
+{% if prevLink %}<a href="{{ prevLink }}">&lt;</a>{% endif %}
+{{ columns.0.0.0.manuscript }} стр. {{ columns.0.0.0.page }}{% if not columns.0.0.0.front %} об.{% endif %}
+{% if nextLink %}<a href="{{ nextLink }}">&gt;</a>{% endif %}
+</h4>
+<p style="font-family: serif;">
+
+
+</p>
+{% if columns %}
+	{% for column in columns %}
+		<div class="column">
+		{% for line in column %}
+			{% for word in line %}
+				{% if word.isPunctuation %}
+					{{ word.orig|ScatWordFormat }}
+				{% else %}
+					<span class="hastooltip {% if word.id == curword %}curword{% endif %}" onclick="showWordDetails('{% url scat-show-word-details word.id %}')" id="{{ word.id }}" onmouseover="hghltGD(this)" onmouseout="dehghltGD(this)"><!-- <span class="tooltip">{{ word.id }}<br/>Часть: {{ word.part }}<br/>Страница: {{ word.page }}{% if not word.front %}об.{% endif %}<br/>Строка: {{ word.line }}</span> -->{{ word.orig|ScatWordFormat }}</span>
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+		</div>
+	{% endfor %}
+
+</div>
+
+{% endif %}
+{% endblock %}

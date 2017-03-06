@@ -1,0 +1,21 @@
+syntax: glob
+.env
+*.orig
+*.pyc
+*.db
+*.pot
+*.xml
+*~
+*.pyo
+logs/*
+local_settings.py
+celery_state.db
+.project
+.pydevproject
+.settings
+.idea
+.coverage
+syntax: regexp
+static/
+(.*/)?\#[^/]*\#$
+.DS_Store

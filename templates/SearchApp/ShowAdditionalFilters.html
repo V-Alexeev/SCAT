@@ -1,0 +1,3 @@
+{% for field in form.visible_fields %}{% if not field.value and field.html_name not in alwaysShow %}
+<option value="{{ field.html_name }}_filter" id="{{ field.html_name }}_filter_selectoption">{{ field.label }}</option>
+{% endif %}{% endfor %}

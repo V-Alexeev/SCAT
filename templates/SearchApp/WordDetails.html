@@ -1,0 +1,69 @@
+{% extends "SearchApp/RootTemplate.html" %}
+
+{% block title %}{{ object.id }} - СКАТ{% endblock %}
+
+{% block main %}
+<h3>{{ object.id }}</h3>
+
+{% if object.name or object.add %}({% endif %}{% if object.name %}имя собственное{% endif %}{% if object.name and object.add %}, {% endif %}{% if object.add %}вставка с полей{% endif %}{% if object.name or object.add %}){% endif %}
+
+<table>
+	<tr>
+		<td>Unicode</td>
+		<td class="showManuscript">{{ object.orig }} {% if object.sic %}[sic]{% endif %}</td>
+	</tr>
+	{% if object.sic and object.corr %}
+	<tr>
+		<td>Вариант исправления</td>
+		<td class="showManuscript">{{ object.corr }}</td>
+	</tr>
+	{% endif %}
+	{% if object.num and object.value %}
+	<tr>
+		<td>Числовое значение</td>
+		<td>{{ object.value }}</td>
+	</tr>
+	{% endif %}
+	<tr>
+		<td>Упрощ. ASCII</td>
+		<td>{{ object.reg }}</td>
+	</tr>
+	<tr>
+		<td>ASCII</td>
+		<td>{{ object.src|safe }}</td>
+	</tr>
+	<tr>
+		<td>Рукопись</td>
+		<td>{{ object.manuscript }}</td>
+	</tr>
+	<tr>
+		<td>Страница</td>
+		<td>{{ object.page }}{% if not object.front %} об.{% endif %}</td>
+	</tr>
+	<tr>
+		<td>Колонка</td>
+		<td>{{ object.column }}</td>
+	</tr>
+	<tr>
+		<td>Строка</td>
+		<td>{{ object.line }}</td>
+	</tr>
+</table>
+{% if object.gramInfo %}
+{% with gi=object.gramInfo %}
+{% if gi.POS %}{{ gi.get_POS_display }}{% endif %}
+{% if gi.declensionType %}{{ gi.get_declensionType_display }}{% endif %}
+{% if gi.flexionDeclensionType %}{{ gi.get_flexionDeclensionType_display }}{% endif %}
+{% if gi.gender %}{{ gi.get_gender_display }}{% endif %}
+{% if gi.case %}{{ gi.get_case_display }}{% endif %}
+{% if gi.number %}{{ gi.get_number_display }}{% endif %}
+{% if gi.mood %}{{ gi.get_mood_display }}{% endif %}
+{% if gi.verbTense %}{{ gi.get_verbTense_display }}{% endif %}
+{% if gi.verbClass %}{{ gi.get_verbClass_display }}{% endif %}
+{% if gi.verbRole %}{{ gi.get_verbRole_display }}{% endif %}
+{% if gi.person %}{{ gi.person }}{% endif %}
+{% if gi.reflexive != None %}{{ gi.reflexive }}{% endif %}
+{% endwith %}
+
+{% endif %}
+{% endblock main %}

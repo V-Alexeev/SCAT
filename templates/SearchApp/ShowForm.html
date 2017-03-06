@@ -1,0 +1,8 @@
+{% for field in form.visible_fields %}
+<p {% if not field.value and field.html_name not in alwaysShow %}style="display:none;"{% endif %} id="{{ field.html_name }}_filter">
+{{ field.label_tag }}: {{ field }}
+</p>
+{% endfor %}
+{% for field in form.hidden_fields %}
+{{ field }}
+{% endfor %}

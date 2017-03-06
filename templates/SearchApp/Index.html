@@ -1,0 +1,11 @@
+{% extends "SearchApp/RootTemplate.html" %}
+{% block main %}
+<h2>Санкт-петербургский корпус агиографических текстов</h2>
+<a href="{% url scat-search %}">Поиск в корпусе</a>
+<h4>Доступные жития</h4>
+<ul>
+{% for manuscript in object_list %}
+<li><a href="{% url scat-show-manuscript manuscript.slug %}">{{ manuscript.name }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
